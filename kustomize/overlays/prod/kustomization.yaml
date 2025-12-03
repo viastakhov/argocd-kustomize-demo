@@ -1,0 +1,6 @@
+namespace: production
+patches:
+- path: deployment.yaml
+resources:
+- ../../base
+- ns.yaml
