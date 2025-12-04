@@ -4,3 +4,6 @@ patches:
 resources:
 - ../../base
 - ns.yaml
+images:
+- name: nginx
+  newTag: 1.28.0

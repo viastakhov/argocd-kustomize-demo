@@ -1,0 +1,36 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: nginx
+  namespace: argocd
+spec:
+  goTemplate: true
+  goTemplateOptions: ["missingkey=error"]
+  generators:
+  - git:
+      repoURL: https://github.com/viastakhov/argocd-kustomize-demo.git
+      revision: HEAD
+      directories:
+      - path: kustomize/overlays/*  
+  template:
+    metadata:
+      name: 'nginx-{{index .path.segments 2}}'
+      finalizers:
+      - resources-finalizer.argocd.argoproj.io
+    spec:
+      project: nginx
+      source:
+        repoURL: https://github.com/viastakhov/argocd-kustomize-demo.git
+        targetRevision: HEAD
+        path: '{{.path.path}}'   
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: '{{index .path.segments 2}}'
+      syncPolicy:
+        syncOptions:
+        - CreateNamespace=false  
+        automated:
+          enabled: true
+          prune: false
+          selfHeal: false
+          allowEmpty: false

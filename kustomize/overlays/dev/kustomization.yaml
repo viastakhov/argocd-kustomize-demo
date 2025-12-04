@@ -2,4 +2,6 @@ namespace: development
 resources:
 - ../../base
 - ns.yaml
-
+images:
+- name: nginx
+  newTag: 1.29.3
